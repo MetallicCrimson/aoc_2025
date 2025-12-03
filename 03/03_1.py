@@ -5,7 +5,7 @@ start_time = time.time()
 acc = 0
 
 with open('full_input.txt') as f:
-#with open('full_input.txt') as f:
+#with open('test_input.txt') as f:
     temp_lines = f.readlines()
 
     for line in temp_lines:

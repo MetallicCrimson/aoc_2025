@@ -2,7 +2,6 @@ import time
 
 lines = []
 start_time = time.time()
-dial = 50
 acc = 0
 
 #with open('test_input_2.txt') as f:

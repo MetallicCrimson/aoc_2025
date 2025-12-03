@@ -3,7 +3,6 @@ import math
 
 lines = []
 start_time = time.time()
-dial = 50
 acc = 0
 
 # screw this, i'm hardcoding the permutations

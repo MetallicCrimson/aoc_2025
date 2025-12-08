@@ -20,7 +20,7 @@ for i in range(width):
         beams.append((i,1))
         break
 
-# print(beams)
+print(beams)
 
 def line_insert(x, y, s):
     lines[y] = lines[y][:x] + "|" + lines[y][x+1:]

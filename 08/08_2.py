@@ -107,10 +107,10 @@ while len(circuits[0]) != box_count:
 #     print(c)
 
 # print(len(circuits[0]), len(circuits[1]), len(circuits[2]))
-print(len(circuits))
+# print(len(circuits))
 #acc = len(circuits[0]) * len(circuits[1]) * len(circuits[2])
-acc = 0
 print(ext_pairs[i-1])
+acc = ext_pairs[i-1][0][0] * ext_pairs[i-1][1][0]
 
 print("The final answer is", acc)
 print("Code executed in", (time.time() - start_time), "seconds")

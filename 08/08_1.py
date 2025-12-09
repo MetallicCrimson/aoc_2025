@@ -89,10 +89,10 @@ for pair in all_pairs:
 
 circuits.sort(key=len, reverse=True)
 
-for c in circuits:
-    print(c)
+# for c in circuits:
+#     print(c)
 
-print(len(circuits[0]), len(circuits[1]), len(circuits[2]))
+# print(len(circuits[0]), len(circuits[1]), len(circuits[2]))
 
 acc = len(circuits[0]) * len(circuits[1]) * len(circuits[2])
 

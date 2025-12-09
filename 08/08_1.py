@@ -4,9 +4,9 @@ import math
 lines = []
 start_time = time.time()
 
-with open('test_input.txt') as f:
+#with open('test_input.txt') as f:
 #with open('test_input_2.txt') as f:
-#with open('full_input.txt') as f:
+with open('full_input.txt') as f:
     temp_lines = f.readlines()
 
     for line in temp_lines:
@@ -15,11 +15,11 @@ with open('test_input.txt') as f:
 boxes = []
 for line in lines:
     (x,y,z) = line.split(",")
-    boxes.append((x,y,z))
+    boxes.append((int(x),int(y),int(z)))
 
 # what even?
 all_pairs = []
-max_pairs = 10
+max_pairs = 1000
 
 smallest_for_each = {}
 
@@ -31,62 +31,71 @@ def get_distance(box1, box2):
 
     return math.sqrt((x2-x1)**2 + (y2-y1)**2 + (z2-z1)**2)
 
-def insert_into_list(box1, box2):
-    print(len(all_pairs))
-
-    current_distance = get_distance(box1, box2)
-    flag = False
-
-    for i in range(len(all_pairs)):
-        if current_distance < all_pairs[i][2]:
-            all_pairs.insert(i, (box1, box2, current_distance))
-
-            if len(all_pairs) > max_pairs:
-                all_pairs.pop()
-            break
-
-    if not flag and len(all_pairs) < max_pairs: ## have to modify this one!!!
-        all_pairs.append((box1, box2, current_distance))
-
 for i in range(len(boxes)):
     (x1,y1,z1) = boxes[i]
 
     for j in range(i+1, len(boxes)):
         (x2,y2,z2) = boxes[j]
         
-        insert_into_list((x1,y1,z1), (x2,y2,z2))
+        # insert_into_list((x1,y1,z1), (x2,y2,z2))
+        all_pairs.append(((x1, y1, z1), (x2, y2, z2),\
+                          get_distance((x1,y1,z1), (x2,y2,z2))))
 
 
+
+#print(len(all_pairs))
+all_pairs.sort(key=lambda x: x[2])
+
+all_pairs = all_pairs[:max_pairs]
 #print(all_pairs)
 
 circuits = []
+connections = {}
 
-for a in all_pairs:
-    flag = False
 
-    (box1, box2) = a[0], a[1]
+def find_in_circuits(box):
+    for i in range(len(circuits)):
+        if box in circuits[i]:
+            return i
+        
+    return -1 #shouldn't even be possible
+
+for pair in all_pairs:
+    (box1, box2) = pair[0], pair[1]
+
+    flag1 = False
+    flag2 = False
+
     for c in circuits:
-        b1_in = box1 in c
-        b2_in = box2 in c
+        if box1 in c:
+            flag1 = True
+        if box2 in c:
+            flag2 = True
 
-        if b1_in and b2_in:
-            flag = True
-            continue
-        elif b1_in:
-            flag = True
-            c.append(box2)
-        elif b2_in:
-            flag = True
-            c.append(box1)
-
-    if not flag:
+    if not flag1 and not flag2:
         circuits.append([box1, box2])
+    elif flag1 and not flag2:
+        temp_i = find_in_circuits(box1)
+        circuits[temp_i].append(box2)
+    elif flag2 and not flag1:
+        temp_i = find_in_circuits(box2)
+        circuits[temp_i].append(box1)
+    else:
+        temp_i1 = find_in_circuits(box1)
+        temp_i2 = find_in_circuits(box2)
+        if temp_i1 != temp_i2:
+            circuits[temp_i1] += circuits[temp_i2]
+            circuits.pop(temp_i2)
 
-print(all_pairs)
+circuits.sort(key=len, reverse=True)
 
 for c in circuits:
     print(c)
 
+print(len(circuits[0]), len(circuits[1]), len(circuits[2]))
 
-#print("The final answer is", acc)
+acc = len(circuits[0]) * len(circuits[1]) * len(circuits[2])
+
+
+print("The final answer is", acc)
 print("Code executed in", (time.time() - start_time), "seconds")
